@@ -480,10 +480,6 @@
          */
         start: function(e){
 
-            e.preventDefault();
-
-            if (!this.container.contains(e.target)){return;}
-
             var that = this,
                 o = this.config,
                 originalEl;
@@ -510,6 +506,10 @@
 
             // ignore lasso
             if (ignore){return false;}
+
+            e.preventDefault();
+
+            if (!this.container.contains(e.target)){return;}
 
             if (!node || o.disabled){return false;}
 
