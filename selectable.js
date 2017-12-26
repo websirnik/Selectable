@@ -8,20 +8,20 @@
  * Version: 0.10.4
  *
  */
-(function(root, factory) {
-    var plugin = "Selectable";
+(function(root, factory){
+    var plugin = 'Selectable';
 
-    if (typeof exports === "object") {
+    if (typeof exports === 'object'){
         module.exports = factory(plugin);
-    } else if (typeof define === "function" && define.amd) {
+    } else if (typeof define === 'function' && define.amd){
         define([], factory);
     } else {
         root[plugin] = factory(plugin);
     }
-})(typeof global !== 'undefined' ? global : this.window || this.global, function() {
-    "use strict";
+})(typeof global !== 'undefined' ? global : this.window || this.global, function(){
+    'use strict';
 
-    var _version = "0.10.4";
+    var _version = '0.10.4';
 
     /**
      * Check for touch screen
@@ -40,6 +40,7 @@
      * @type {Object}
      */
     var defaultConfig = {
+        ignore: false,
         toggle: false,
         autoRefresh: true,
 
@@ -47,9 +48,9 @@
 
         appendTo: document.body,
 
-        filter: ".ui-selectable",
-        tolerance: "touch",
-        shiftDirection: "normal",
+        filter: '.ui-selectable',
+        tolerance: 'touch',
+        shiftDirection: 'normal',
 
         autoScroll: {
             offset: 40,
@@ -62,12 +63,12 @@
         },
 
         classes: {
-            lasso: "ui-lasso",
-            selected: "ui-selected",
-            container: "ui-container",
-            selecting: "ui-selecting",
-            selectable: "ui-selectable",
-            unselecting: "ui-unselecting"
+            lasso: 'ui-lasso',
+            selected: 'ui-selected',
+            container: 'ui-container',
+            selecting: 'ui-selecting',
+            selectable: 'ui-selectable',
+            unselecting: 'ui-unselecting'
         }
     };
 
@@ -79,7 +80,7 @@
      * @param  {Object}   scope    Function scope
      * @return {Void}
      */
-    var on = function(el, type, callback, scope) {
+    var on = function(el, type, callback, scope){
         el.addEventListener(type, callback, false);
     };
 
@@ -90,7 +91,7 @@
      * @param  {Function} callback Event callback
      * @return {Void}
      */
-    var off = function(el, type, callback) {
+    var off = function(el, type, callback){
         el.removeEventListener(type, callback);
     };
 
@@ -100,7 +101,7 @@
      * @param  {Function} fn Callback
      * @return {Object|Boolean}
      */
-    var closest = function(el, fn) {
+    var closest = function(el, fn){
         return el && el !== document.documentElement && (fn(el) ? el : closest(el.parentNode, fn));
     };
 
@@ -108,8 +109,8 @@
      * Check is item is object
      * @return {Boolean}
      */
-    var isObject = function(val) {
-        return Object.prototype.toString.call(val) === "[object Object]";
+    var isObject = function(val){
+        return Object.prototype.toString.call(val) === '[object Object]';
     };
 
     /**
@@ -117,7 +118,7 @@
      * @param  {Mixed} arr
      * @return {Boolean}
      */
-    var isCollection = function(arr) {
+    var isCollection = function(arr){
         return Array.isArray(arr) || arr instanceof HTMLCollection || arr instanceof NodeList;
     };
 
@@ -127,11 +128,11 @@
      * @param  {Object} t
      * @return {Object}
      */
-    var extend = function(src, props) {
-        for (var prop in props) {
-            if (props.hasOwnProperty(prop)) {
+    var extend = function(src, props){
+        for (var prop in props){
+            if (props.hasOwnProperty(prop)){
                 var val = props[prop];
-                if (val && isObject(val)) {
+                if (val && isObject(val)){
                     src[prop] = src[prop] || {};
                     extend(src[prop], val);
                 } else {
@@ -149,16 +150,16 @@
      * @param  {Object}           scope   Change the value of this
      * @return {Void}
      */
-    var each = function(arr, fn, scope) {
+    var each = function(arr, fn, scope){
         var n;
-        if (isObject(arr)) {
-            for (n in arr) {
-                if (Object.prototype.hasOwnProperty.call(arr, n)) {
+        if (isObject(arr)){
+            for (n in arr){
+                if (Object.prototype.hasOwnProperty.call(arr, n)){
                     fn.call(scope, arr[n], n);
                 }
             }
         } else {
-            for (n = 0; n < arr.length; n++) {
+            for (n = 0; n < arr.length; n++){
                 fn.call(scope, arr[n], n);
             }
         }
@@ -170,18 +171,18 @@
      * @param  {(String|Object)} e
      * @param  {String|Object}
      */
-    var css = function(el, obj) {
+    var css = function(el, obj){
         var style = el.style;
-        if (el) {
-            if (obj === undefined) {
+        if (el){
+            if (obj === undefined){
                 return window.getComputedStyle(el);
             } else {
-                if (isObject(obj)) {
-                    each(obj, function(val, prop) {
-                        if (!(prop in style)) {
-                            prop = "-webkit-" + prop;
+                if (isObject(obj)){
+                    each(obj, function(val, prop){
+                        if (!(prop in style)){
+                            prop = '-webkit-' + prop;
                         }
-                        el.style[prop] = val + (typeof val === "string" ? "" : prop === "opacity" ? "" : "px");
+                        el.style[prop] = val + (typeof val === 'string' ? '' : prop === 'opacity' ? '' : 'px');
                     });
                 }
             }
@@ -194,7 +195,7 @@
      * @param  {Boolean} e  Include margins
      * @return {Object}     Formatted DOMRect copy
      */
-    var rect = function(e) {
+    var rect = function(e){
         var w = window,
             o = e.getBoundingClientRect(),
             b = document.documentElement || document.body.parentNode || document.body,
@@ -217,14 +218,14 @@
      * @param  {Boolean} now
      * @return {Function}
      */
-    var throttle = function(fn, limit, context) {
+    var throttle = function(fn, limit, context){
         var wait;
-        return function() {
+        return function(){
             context = context || this;
-            if (!wait) {
+            if (!wait){
                 fn.apply(context, arguments);
                 wait = true;
-                return setTimeout(function() {
+                return setTimeout(function(){
                     wait = false;
                 }, limit);
             }
@@ -241,12 +242,12 @@
          * @param {Object} node Element node
          * @param {String} a Class name
          */
-        add: function(node, name) {
-            if (_supports) {
+        add: function(node, name){
+            if (_supports){
                 node.classList.add(name);
             } else {
-                if (!classList.contains(node, name)) {
-                    node.className = node.className.trim() + " " + name;
+                if (!classList.contains(node, name)){
+                    node.className = node.className.trim() + ' ' + name;
                 }
             }
         },
@@ -256,14 +257,14 @@
          * @param {Object} node Element node
          * @param {String} name Class name
          */
-        remove: function(node, name) {
-            if (_supports) {
+        remove: function(node, name){
+            if (_supports){
                 node.classList.remove(name);
             } else {
-                if (classList.contains(node, name)) {
+                if (classList.contains(node, name)){
                     node.className = node.className.replace(
-                        new RegExp("(^|\\s)" + name.split(" ").join("|") + "(\\s|$)", "gi"),
-                        " "
+                        new RegExp('(^|\\s)' + name.split(' ').join('|') + '(\\s|$)', 'gi'),
+                        ' '
                     );
                 }
             }
@@ -274,12 +275,12 @@
          * @param {Object} node Element node
          * @param {String} name Class name
          */
-        contains: function(node, name) {
+        contains: function(node, name){
             if (node)
-                return _supports ?
-                    node.classList.contains(name) :
-                    !!node.className &&
-                    !!node.className.match(new RegExp("(\\s|^)" + name + "(\\s|$)"));
+            {return _supports ?
+                node.classList.contains(name) :
+                !!node.className &&
+                    !!node.className.match(new RegExp('(\\s|^)' + name + '(\\s|$)'));}
         }
     };
 
@@ -288,7 +289,7 @@
      * @param  {Object}  e Event interface
      * @return {Boolean}
      */
-    var isCmdKey = function(e) {
+    var isCmdKey = function(e){
         return !!e.ctrlKey || !!e.metaKey;
     };
 
@@ -297,12 +298,12 @@
      * @param  {Object}  e Event interface
      * @return {Boolean}
      */
-    var isShiftKey = function(e) {
+    var isShiftKey = function(e){
         return !!e.shiftKey;
     };
 
     /* SELECTABLE */
-    function Selectable(options) {
+    function Selectable(options){
         this.version = _version;
         this.config = extend(defaultConfig, options);
         this.init();
@@ -313,7 +314,7 @@
          * Init instance
          * @return {void}
          */
-        init: function() {
+        init: function(){
             var that = this,
                 o = this.config;
 
@@ -332,18 +333,18 @@
 
             this.lasso = false;
 
-            if (o.lasso && isObject(o.lasso)) {
+            if (o.lasso && isObject(o.lasso)){
                 /* lasso */
                 this.lasso = document.createElement('div');
                 this.lasso.className = o.classes.lasso;
 
                 css(this.lasso, extend({
-                    position: "fixed",
+                    position: 'fixed',
                     opacity: 0, // border will show even at zero width / height
                 }, o.lasso));
             }
 
-            if (_touch) {
+            if (_touch){
                 o.toggle = false;
             }
 
@@ -357,7 +358,7 @@
                 recalculate: throttle(this.recalculate, o.throttle, this)
             };
 
-            if (this.autoscroll) {
+            if (this.autoscroll){
                 this.events.scroll = throttle(this.scroll, o.throttle, this);
             }
 
@@ -367,8 +368,8 @@
 
             this.enable();
 
-            setTimeout(function() {
-                that.emit("selectable.init");
+            setTimeout(function(){
+                that.emit('selectable.init');
             }, 10);
         },
 
@@ -376,7 +377,7 @@
          * Update instance
          * @return {Void}
          */
-        update: function() {
+        update: function(){
             var o = this.config.classes,
                 c = classList.contains;
 
@@ -390,7 +391,7 @@
 
             this.items = [];
 
-            each(this.nodes, function(el, i) {
+            each(this.nodes, function(el, i){
                 classList.add(el, o.selectable);
 
                 this.items[i] = {
@@ -403,14 +404,14 @@
                 };
             }, this);
 
-            this.emit("selectable.update", this.items);
+            this.emit('selectable.update', this.items);
         },
 
         /**
          * Add instance event listeners
          * @return {Void}
          */
-        bind: function() {
+        bind: function(){
             var e = this.events;
 
             // Attach event listeners
@@ -420,15 +421,15 @@
             on(document, 'keydown', e.keydown);
             on(document, 'keyup', e.keyup);
 
-            if (this.autoscroll) {
-                on(this.container, "scroll", e.scroll);
+            if (this.autoscroll){
+                on(this.container, 'scroll', e.scroll);
             }
 
             // Mobile
-            on(this.container, "touchstart", e.touchstart);
-            on(document, "touchend", e.end);
-            on(document, "touchcancel", e.end);
-            on(document, "touchmove", e.drag);
+            on(this.container, 'touchstart', e.touchstart);
+            on(document, 'touchend', e.end);
+            on(document, 'touchcancel', e.end);
+            on(document, 'touchmove', e.drag);
 
             on(window, 'resize', e.recalculate);
             on(window, 'scroll', e.recalculate);
@@ -438,7 +439,7 @@
          * Remove instance event listeners
          * @return {Void}
          */
-        unbind: function() {
+        unbind: function(){
             var e = this.events;
 
             off(this.container, 'mousedown', e.start);
@@ -447,15 +448,15 @@
             off(document, 'keydown', e.keydown);
             off(document, 'keyup', e.keyup);
 
-            if (this.autoscroll) {
-                off(this.container, "scroll", e.scroll);
+            if (this.autoscroll){
+                off(this.container, 'scroll', e.scroll);
             }
 
             // Mobile
-            off(this.container, "touchstart", e.start);
-            off(document, "touchend", e.end);
-            off(document, "touchcancel", e.end);
-            off(document, "touchmove", e.drag);
+            off(this.container, 'touchstart', e.start);
+            off(document, 'touchend', e.end);
+            off(document, 'touchcancel', e.end);
+            off(document, 'touchmove', e.drag);
 
             off(window, 'resize', e.recalculate);
             off(window, 'scroll', e.recalculate);
@@ -466,8 +467,8 @@
          * @param  {Object} e Event interface
          * @return {Void}
          */
-        touchstart: function(e) {
-            off(this.container, "mousedown", this.events.start);
+        touchstart: function(e){
+            off(this.container, 'mousedown', this.events.start);
 
             this.start(e);
         },
@@ -477,10 +478,11 @@
          * @param  {Object} e Event interface
          * @return {Void}
          */
-        start: function(e) {
+        start: function(e){
+
             e.preventDefault();
 
-            if (!this.container.contains(e.target)) return;
+            if (!this.container.contains(e.target)){return;}
 
             var that = this,
                 o = this.config,
@@ -488,15 +490,32 @@
 
             // selectable nodes may have child elements
             // so let's get the closest selectable node
-            var node = closest(e.target, function(el) {
+            var node = closest(e.target, function(el){
                 return el === that.container || classList.contains(el, o.classes.selectable);
             });
 
-            if (!node || o.disabled) return false;
+            // flag for ignoring lasson
+            var ignore = false;
+
+            each(this.items, function(item){
+                // if node seleced
+                // if option for ignoring lasso enabled
+                // if selected node equals current node
+                // set flag for ignoring lasson
+                if (item.selected && o.ignore && item.node === node){
+                    ignore = true;
+                    return;
+                }
+            });
+
+            // ignore lasso
+            if (ignore){return false;}
+
+            if (!node || o.disabled){return false;}
 
             e.preventDefault();
 
-            var touch = e.type === "touchstart";
+            var touch = e.type === 'touchstart';
 
             this.dragging = true;
 
@@ -505,82 +524,81 @@
                 y: touch ? e.touches[0].pageY : e.pageY,
             };
 
-            if (this.autoscroll) {
+            if (this.autoscroll){
                 this.origin.scroll = {
                     x: this.container.scrollLeft,
                     y: this.container.scrollTop,
                 };
             }
 
-            if (this.lasso) {
+            if (this.lasso){
                 this.container.appendChild(this.lasso);
             }
 
-            if (node !== this.container) {
+            if (node !== this.container){
                 classList.add(node, o.classes.selecting);
             }
 
-            if (o.autoRefresh) {
+            if (o.autoRefresh){
                 this.update();
             }
 
-            if (isShiftKey(e)) {
+            if (isShiftKey(e)){
 
                 var items = this.items,
                     found = false,
                     num = this.items.length,
-                    reverse = o.shiftDirection !== "normal";
+                    reverse = o.shiftDirection !== 'normal';
 
-                var shiftSelect = function(n) {
+                var shiftSelect = function(n){
                     // found the item we clicked
-                    if (items[n].node === node) {
+                    if (items[n].node === node){
                         found = true;
                     }
 
                     // found a selected item so stop
-                    if (found && items[n].selected) {
+                    if (found && items[n].selected){
                         return true;
                     }
 
                     // continue selecting items until we find a selected item
                     // or the first / last item if there aren't any
-                    if (found) {
+                    if (found){
                         items[n].selecting = true;
                     }
 
                     return false;
                 };
 
-                if (reverse) {
-                    for (var i = 0; i < num; i++) {
-                        if (shiftSelect(i)) {
+                if (reverse){
+                    for (var i = 0; i < num; i++){
+                        if (shiftSelect(i)){
                             break;
                         }
                     }
                 } else {
-                    while (num--) {
-                        if (shiftSelect(num)) {
+                    while (num--){
+                        if (shiftSelect(num)){
                             break;
                         }
                     }
                 }
             }
 
-            each(this.items, function(item) {
+            each(this.items, function(item){
                 var el = item.node;
-                if (item.selected) {
-
+                if (item.selected){
                     item.startselected = true;
 
                     var unselect = false;
 
-                    if (touch || o.toggle) {
+                    if (touch || o.toggle){
                         unselect = el === node;
                     } else {
                         unselect = !isCmdKey(e) && !isShiftKey(e);
                     }
 
-                    if (unselect) {
+                    if (unselect){
                         classList.remove(el, o.classes.selected);
                         item.selected = false;
 
@@ -588,7 +606,7 @@
                         item.unselecting = true;
                     }
                 }
-                if (el === node) {
+                if (el === node){
                     originalEl = item;
                 }
             });
@@ -603,15 +621,15 @@
          * @param  {Object} e Event interface
          * @return {Void}
          */
-        drag: function(e) {
+        drag: function(e){
             var o = this.config;
 
-            if (o.disabled || !this.dragging || isShiftKey(e)) return;
+            if (o.disabled || !this.dragging || isShiftKey(e)){return;}
 
             var that = this,
                 c,
                 tmp,
-                t = e.type === "touchmove";
+                t = e.type === 'touchmove';
 
             this.offset = c = {
                 x1: this.origin.x,
@@ -624,7 +642,7 @@
                 }
             };
 
-            if (this.autoscroll) {
+            if (this.autoscroll){
                 c.scroll = {
                     x: this.container.scrollLeft,
                     y: this.container.scrollTop,
@@ -638,19 +656,19 @@
                 this.autoScroll(e);
             }
 
-            if (c.x1 > c.x2) {
+            if (c.x1 > c.x2){
                 tmp = c.x2;
                 c.x2 = c.x1;
                 c.x1 = tmp;
             }
-            if (c.y1 > c.y2) {
+            if (c.y1 > c.y2){
                 tmp = c.y2;
                 c.y2 = c.y1;
                 c.y1 = tmp;
             }
 
             /* highlight */
-            each(this.items, function(item) {
+            each(this.items, function(item){
                 that.highlight(item, isCmdKey(e));
             });
 
@@ -661,7 +679,7 @@
                 y2: (c.y2 + this.data.up) - (c.y1 + this.data.down),
             };
 
-            if (this.lasso) {
+            if (this.lasso){
                 this.updateHelper(coords);
             }
 
@@ -673,8 +691,8 @@
          * @param  {Object} e Event interface
          * @return {Void}
          */
-        end: function(e) {
-            if (!this.dragging) return;
+        end: function(e){
+            if (!this.dragging){return;}
 
             this.dragging = false;
 
@@ -686,11 +704,11 @@
                 unselected = [];
 
             // remove the lasso
-            if (this.lasso && this.container.contains(this.lasso)) {
+            if (this.lasso && this.container.contains(this.lasso)){
                 this.container.removeChild(this.lasso);
             }
 
-            if (this.lasso) {
+            if (this.lasso){
                 // Reset the lasso
                 css(this.lasso, {
                     opacity: 0,
@@ -706,7 +724,7 @@
             }
 
             // now let's get the closest valid selectable node
-            endEl = closest(node, function(el) {
+            endEl = closest(node, function(el){
                 return classList.contains(el, o.classes.selectable);
             });
 
@@ -716,27 +734,27 @@
             this.data.up = 0;
 
             // loop over items and check their state
-            each(this.items, function(item) {
+            each(this.items, function(item){
 
                 // If we've mousedown'd and mouseup'd on the same selected item
                 // toggling it's state to unselected won't work if we've dragged even
                 // a small amount. This can happen if we're moving between items quickly
                 // while the mouse button is down. We can fix that here.
-                if (o.toggle && item.node === endEl && item.node === that.startEl) {
-                    if (item.selecting && item.startselected) {
+                if (o.toggle && item.node === endEl && item.node === that.startEl){
+                    if (item.selecting && item.startselected){
                         item.unselecting = true;
                         item.selecting = false;
                     }
                 }
 
                 // item was marked for unselect
-                if (item.unselecting) {
+                if (item.unselecting){
                     unselected.push(item);
                     this.unselect(item);
                 }
 
                 // item was marked for select
-                if (item.selecting) {
+                if (item.selecting){
                     selected.push(item);
                     this.select(item);
                 }
@@ -750,12 +768,12 @@
          * @param  {Object} e Event interface
          * @return {Void}
          */
-        keydown: function(e) {
+        keydown: function(e){
             this.cmdDown = isCmdKey(e);
             this.shiftDown = isShiftKey(e);
 
-            if (this.cmdDown) {
-                if (e.keyCode == 65 || e.keyCode == 97) {
+            if (this.cmdDown){
+                if (e.keyCode == 65 || e.keyCode == 97){
                     e.preventDefault();
                     this.selectAll();
                 }
@@ -767,7 +785,7 @@
          * @param  {Object} e Event interface
          * @return {Void}
          */
-        keyup: function(e) {
+        keyup: function(e){
             this.cmdDown = isCmdKey(e);
             this.shiftDown = isShiftKey(e);
         },
@@ -777,8 +795,8 @@
          * @param  {Object} e Event interface
          * @return {Void}
          */
-        scroll: function(e) {
-            each(this.items, function(item) {
+        scroll: function(e){
+            each(this.items, function(item){
                 item.rect = rect(item.node);
             });
         },
@@ -788,7 +806,7 @@
          * @param  {Object} coords Dimensions
          * @return {Void}
          */
-        updateHelper: function(coords) {
+        updateHelper: function(coords){
             var style = {
                 opacity: 1,
                 left: coords.x1,
@@ -797,10 +815,10 @@
                 height: coords.y2
             };
 
-            if (this.autoscroll) {
+            if (this.autoscroll){
                 style = extend(style, {
                     zIndex: 0,
-                    position: "absolute",
+                    position: 'absolute',
                     left: coords.x1 - this.size.rect.x1 + this.offset.scroll.x,
                     top: coords.y1 - this.size.rect.y1 + this.offset.scroll.y,
                 });
@@ -814,7 +832,7 @@
          * @param  {Object} e Event interface
          * @return {Void}
          */
-        autoScroll: function(e) {
+        autoScroll: function(e){
             var o = this.config.autoScroll,
                 r = this.size.rect,
                 l = this.offset.scroll.x,
@@ -827,14 +845,14 @@
                 nt = t;
 
             // Check we're not scrolled all the way to the top or bottom
-            if (t > 0 || t < h - r.height) {
+            if (t > 0 || t < h - r.height){
                 // Check we're in the auto-scroll trigger zone
-                if (e.pageY >= r.y2 - o.offset || e.pageY <= r.y1 + o.offset) {
-                    if (e.pageY >= r.y2 - o.offset) { // scrolling down
+                if (e.pageY >= r.y2 - o.offset || e.pageY <= r.y1 + o.offset){
+                    if (e.pageY >= r.y2 - o.offset){ // scrolling down
                         y = o.increment;
 
                         this.scrolling.y = 1;
-                    } else if (e.pageY <= r.y1 + o.offset) { // scrolling up
+                    } else if (e.pageY <= r.y1 + o.offset){ // scrolling up
                         y = -o.increment;
 
                         this.scrolling.y = -1;
@@ -848,14 +866,14 @@
             }
 
             // Check we're not scrolled all the way to the left or right
-            if (l > 0 || l < w - r.width) {
+            if (l > 0 || l < w - r.width){
                 // Check we're in the auto-scroll trigger zone
-                if (e.pageX >= r.x2 - o.offset || e.pageX <= r.x1 + o.offset) {
-                    if (e.pageX >= r.x2 - o.offset) { // scrolling right
+                if (e.pageX >= r.x2 - o.offset || e.pageX <= r.x1 + o.offset){
+                    if (e.pageX >= r.x2 - o.offset){ // scrolling right
                         x = o.increment;
 
                         this.scrolling.x = 1;
-                    } else if (e.pageX <= r.x1 + o.offset) { // scrolling left
+                    } else if (e.pageX <= r.x1 + o.offset){ // scrolling left
                         x = -o.increment;
 
                         this.scrolling.x = -1;
@@ -871,15 +889,15 @@
             this.data.x = (this.origin.scroll.x - this.offset.scroll.x);
             this.data.y = (this.origin.scroll.y - this.offset.scroll.y);
 
-            if (this.scrolling.x > 0) {
+            if (this.scrolling.x > 0){
                 this.data.right = this.data.x;
-            } else if (this.scrolling.x < 0) {
+            } else if (this.scrolling.x < 0){
                 this.data.left = this.data.x;
             }
 
-            if (this.scrolling.y > 0) {
+            if (this.scrolling.y > 0){
                 this.data.down = this.data.y;
-            } else if (this.scrolling.y < 0) {
+            } else if (this.scrolling.y < 0){
                 this.data.up = this.data.y;
             }
         },
@@ -889,7 +907,7 @@
          * @param  {Object} item   The item
          * @return {Void}
          */
-        highlight: function(item, cmd) {
+        highlight: function(item, cmd){
             var offset = this.offset,
                 o = this.config,
                 cls = o.classes,
@@ -898,30 +916,30 @@
                 d = this.data,
                 over = false;
 
-            if (o.tolerance == "touch") {
+            if (o.tolerance == 'touch'){
                 over = !(r.x1 > offset.x2 + d.left || (r.x2 < offset.x1 + d.right ||
                     (r.y1 > offset.y2 + d.up || r.y2 < offset.y1 + d.down)));
-            } else if (o.tolerance == "fit") {
+            } else if (o.tolerance == 'fit'){
                 over = r.x1 > offset.x1 + d.right && (r.x2 < offset.x2 + d.left &&
                     (r.y1 > offset.y1 + d.down && r.y2 < offset.y2 + d.up));
             }
 
-            if (over) {
-                if (item.selected && !o.toggle) {
+            if (over){
+                if (item.selected && !o.toggle){
                     classList.remove(el, cls.selected);
                     item.selected = false;
                 }
-                if (item.unselecting && (!o.toggle || o.toggle && o.toggle !== "drag")) {
+                if (item.unselecting && (!o.toggle || o.toggle && o.toggle !== 'drag')){
                     classList.remove(el, cls.unselecting);
                     item.unselecting = false;
                 }
-                if (!item.selecting) {
+                if (!item.selecting){
                     classList.add(el, cls.selecting);
                     item.selecting = true;
                 }
             } else {
-                if (item.selecting) {
-                    if (cmd && item.startselected) {
+                if (item.selecting){
+                    if (cmd && item.startselected){
                         classList.remove(el, cls.selecting);
                         item.selecting = false;
 
@@ -931,15 +949,15 @@
                         classList.remove(el, cls.selecting);
                         item.selecting = false;
 
-                        if (item.startselected && !o.toggle) {
+                        if (item.startselected && !o.toggle){
                             classList.add(el, cls.unselecting);
                             item.unselecting = true;
                         }
                     }
                 }
-                if (el.selected) {
-                    if (!cmd) {
-                        if (!item.startselected) {
+                if (el.selected){
+                    if (!cmd){
+                        if (!item.startselected){
                             classList.remove(el, cls.selected);
                             item.selected = false;
 
@@ -955,12 +973,12 @@
          * Set the container
          * @param {String|Object} container CSS3 selector string or HTMLElement
          */
-        setContainer: function(container) {
+        setContainer: function(container){
 
             var o = this.config,
                 old;
 
-            if (this.container) {
+            if (this.container){
                 old = this.container;
 
                 this.unbind();
@@ -968,30 +986,30 @@
 
             container = container || o.appendTo;
 
-            if (typeof container === 'string') {
+            if (typeof container === 'string'){
                 this.container = document.querySelector(container);
-            } else if (container instanceof Element && container.nodeName) {
+            } else if (container instanceof Element && container.nodeName){
                 this.container = container;
             }
 
             classList.add(this.container, this.config.classes.container);
 
-            if (old) {
+            if (old){
                 classList.remove(old, this.config.classes.container);
             }
 
-            if (isCollection(o.filter)) {
+            if (isCollection(o.filter)){
                 this.nodes = [].slice.call(o.filter);
-            } else if (typeof o.filter === "string") {
+            } else if (typeof o.filter === 'string'){
                 this.nodes = [].slice.call(this.container.querySelectorAll(o.filter));
             }
 
-            if (this.autoscroll) {
+            if (this.autoscroll){
                 var style = css(this.container);
 
-                if (style.position === "static") {
+                if (style.position === 'static'){
                     css(this.container, {
-                        position: "relative"
+                        position: 'relative'
                     });
                 }
             }
@@ -1004,10 +1022,10 @@
          * @param  {Object} item
          * @return {Boolean}
          */
-        select: function(item, all) {
+        select: function(item, all){
 
-            if (isCollection(item)) {
-                each(item, function(itm) {
+            if (isCollection(item)){
+                each(item, function(itm){
                     this.select(itm);
                 }, this);
 
@@ -1016,9 +1034,9 @@
 
             item = this.get(item);
 
-            if (item) {
+            if (item){
                 // toggle item if already selected
-                if (this.config.toggle && this.config.toggle === "drag" && !all && item.selected && !this.cmdDown) {
+                if (this.config.toggle && this.config.toggle === 'drag' && !all && item.selected && !this.cmdDown){
                     return this.unselect(item);
                 }
 
@@ -1045,10 +1063,10 @@
          * @param  {Object} item
          * @return {Boolean}
          */
-        unselect: function(item) {
+        unselect: function(item){
 
-            if (isCollection(item)) {
-                each(item, function(itm) {
+            if (isCollection(item)){
+                each(item, function(itm){
                     this.unselect(itm);
                 }, this);
 
@@ -1057,7 +1075,7 @@
 
             item = this.get(item);
 
-            if (item) {
+            if (item){
                 var el = item.node,
                     o = this.config.classes;
 
@@ -1083,15 +1101,15 @@
          * @param {Object} node HTMLElement
          * * @return {Void}
          */
-        add: function(node) {
-            if (isCollection(node)) {
-                each(node, function(el) {
-                    if (this.nodes.indexOf(el) < 0 && el instanceof Element) {
+        add: function(node){
+            if (isCollection(node)){
+                each(node, function(el){
+                    if (this.nodes.indexOf(el) < 0 && el instanceof Element){
                         this.nodes.push(el);
                     }
                 }, this);
             } else {
-                if (this.nodes.indexOf(node) < 0 && node instanceof Element) {
+                if (this.nodes.indexOf(node) < 0 && node instanceof Element){
                     this.nodes.push(node);
                 }
             }
@@ -1104,12 +1122,12 @@
          * @param  {Mixed} item index, node or object
          * @return {Boolean}
          */
-        remove: function(item, stop) {
+        remove: function(item, stop){
             item = this.get(item);
 
-            if (item) {
-                if (isCollection(item)) {
-                    for (var i = item.length - 1; i >= 0; i--) {
+            if (item){
+                if (isCollection(item)){
+                    for (var i = item.length - 1; i >= 0; i--){
                         this.remove(item[i], i > 0);
                     }
                 } else {
@@ -1125,7 +1143,7 @@
                     this.nodes.splice(this.nodes.indexOf(item.node), 1);
                 }
 
-                if (!stop) {
+                if (!stop){
                     this.update();
                 }
 
@@ -1139,8 +1157,8 @@
          * Update item coords
          * @return {Void}
          */
-        recalculate: function() {
-            each(this.nodes, function(el, i) {
+        recalculate: function(){
+            each(this.nodes, function(el, i){
                 this.items[i].rect = rect(el);
             }, this);
             this.emit('selectable.recalculate');
@@ -1150,8 +1168,8 @@
          * Select all items
          * @return {Void}
          */
-        selectAll: function() {
-            each(this.items, function(item) {
+        selectAll: function(){
+            each(this.items, function(item){
                 this.select(item, true);
             }, this);
         },
@@ -1160,8 +1178,8 @@
          * Unselect all items
          * @return {Void}
          */
-        clear: function() {
-            for (var i = this.items.length - 1; i >= 0; i--) {
+        clear: function(){
+            for (var i = this.items.length - 1; i >= 0; i--){
                 this.unselect(this.items[i]);
             }
         },
@@ -1170,30 +1188,30 @@
          * Get an item
          * @return {Object|Boolean}
          */
-        get: function(item) {
+        get: function(item){
             var found = false;
 
-            if (isCollection(item)) {
+            if (isCollection(item)){
                 found = [];
-                each(item, function(i) {
+                each(item, function(i){
                     i = this.get(i);
 
                     if (i)
-                        found.push(i);
+                    {found.push(i);}
                 }, this);
             } else {
                 // item is an index
-                if (!isNaN(item)) {
-                    if (this.items.indexOf(this.items[item]) >= 0) {
+                if (!isNaN(item)){
+                    if (this.items.indexOf(this.items[item]) >= 0){
                         found = this.items[item];
                     }
                 }
                 // item is a node
-                else if (item instanceof Element) {
+                else if (item instanceof Element){
                     found = this.items[this.nodes.indexOf(item)];
                 }
                 // item is an item
-                else if (isObject(item) && this.items.indexOf(item) >= 0) {
+                else if (isObject(item) && this.items.indexOf(item) >= 0){
                     found = item;
                 }
             }
@@ -1204,7 +1222,7 @@
          * Get all items
          * @return {Array}
          */
-        getItems: function() {
+        getItems: function(){
             return this.items;
         },
 
@@ -1212,7 +1230,7 @@
          * Get all nodes
          * @return {Array}
          */
-        getNodes: function() {
+        getNodes: function(){
             return this.nodes;
         },
 
@@ -1220,8 +1238,8 @@
          * Get all selected items
          * @return {Array}
          */
-        getSelectedItems: function() {
-            return this.getItems().filter(function(item) {
+        getSelectedItems: function(){
+            return this.getItems().filter(function(item){
                 return item.selected;
             });
         },
@@ -1230,8 +1248,8 @@
          * Get all selected nodes
          * @return {Array}
          */
-        getSelectedNodes: function() {
-            return this.getSelectedItems().map(function(item) {
+        getSelectedNodes: function(){
+            return this.getSelectedItems().map(function(item){
                 return item.node;
             });
         },
@@ -1242,7 +1260,7 @@
          * @param  {Function} callback
          * @return {Void}
          */
-        on: function(event, callback) {
+        on: function(event, callback){
             this.events = this.events || {};
             this.events[event] = this.events[event] || [];
             this.events[event].push(callback);
@@ -1254,9 +1272,9 @@
          * @param  {Function} callback
          * @return {Void}
          */
-        off: function(event, callback) {
+        off: function(event, callback){
             this.events = this.events || {};
-            if (event in this.events === false) return;
+            if (event in this.events === false){return;}
             this.events[event].splice(this.events[event].indexOf(callback), 1);
         },
 
@@ -1265,10 +1283,10 @@
          * @param  {String} event
          * @return {Void}
          */
-        emit: function(event) {
+        emit: function(event){
             this.events = this.events || {};
-            if (event in this.events === false) return;
-            for (var i = 0; i < this.events[event].length; i++) {
+            if (event in this.events === false){return;}
+            for (var i = 0; i < this.events[event].length; i++){
                 this.events[event][i].apply(this, Array.prototype.slice.call(arguments, 1));
             }
         },
@@ -1277,8 +1295,8 @@
          * Enable instance
          * @return {Boolean}
          */
-        enable: function() {
-            if (!this.enabled) {
+        enable: function(){
+            if (!this.enabled){
                 this.enabled = true;
 
                 this.bind();
@@ -1295,8 +1313,8 @@
          * Disable instance
          * @return {Boolean}
          */
-        disable: function() {
-            if (this.enabled) {
+        disable: function(){
+            if (this.enabled){
                 this.enabled = false;
 
                 this.unbind();
@@ -1313,13 +1331,13 @@
          * Destroy instance
          * @return {void}
          */
-        destroy: function() {
+        destroy: function(){
             this.disable();
 
             this.remove(this.items);
 
-            each(this, function(val, prop) {
-                if (prop !== "version" && prop !== "config") delete(this[prop]);
+            each(this, function(val, prop){
+                if (prop !== 'version' && prop !== 'config'){delete(this[prop]);}
             }, this);
         }
     };
